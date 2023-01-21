@@ -1,0 +1,39 @@
+{% load static %}
+{%  for post in posts %}
+    <div class="card mb-3 mr-5 ml-5" style="border-radius: 8px; border-color: transparent; box-shadow: 0 1px 2px">
+        <div class="card-body">
+            
+            <div>
+                <strong><a href="{% url 'userPosts' post.user.id 1 %}" class="post-user">{{ post.user.username }}</a></strong>
+                {% if user == post.user %}
+                    <button style="float: right; font-size: small; padding: 4px 10px" data-postid="{{ post.id }}" class="btn btn-info edit">Edit
+                    </button>
+                {% endif %}
+                <p style="margin-bottom: 3px; line-height: 18px"><small class="time-data"> {{ post.time }}</small></p>
+
+            </div>
+            <br/>
+            <div class="card-text content" id="content{{ post.id }}" style="font-size: 0.9rem; margin-bottom: .5rem">{{ post.content }}</div>
+            <br/>
+            <div><img src="{% static 'network/like_icon.png' %}" width="17px" style="position: relative; top: 50%; transform: perspective(1px) translateY(-10%);"><span id="likes{{ post.id }}" style="font-size: 0.95rem; margin-left: .5rem; color: #65676B">{{ post.likes.all.count }}</span></div>
+            <hr style="margin-bottom: 3px; margin-top: 8px">
+
+            <div style="text-align: left">
+                {% if user.is_authenticated %}
+                    <button data-postid="{{ post.id }}" class="btn post-btn like">
+                        {% if user in post.likes.all %}
+                                Unlike
+                        {% else %}
+                                Like
+                        {% endif %}
+                    </button>
+                {% else %}
+                    <a href="{% url 'login' %}">Like</a>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static 'network/index.js' %}"></script>
+{% endfor %}
